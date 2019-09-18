@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.educandoweb.curso.dto.UserDTO;
+import com.educandoweb.curso.dto.UserInsertDTO;
 import com.educandoweb.curso.entities.User;
 import com.educandoweb.curso.repositories.UserRepository;
 import com.educandoweb.curso.services.excceptions.DatabaseExcception;
@@ -35,8 +36,10 @@ public class UserService {
 		return new UserDTO(entity);
 	}
 	
-	public User insert(User obj) {
-		return repository.save(obj);
+	public UserDTO insert(UserInsertDTO dto) {
+		User entity = dto.toEntity();
+		entity =  repository.save(entity);
+		return new UserDTO(entity);
 	}
 	
 	public void delete(Long id) {
