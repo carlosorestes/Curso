@@ -49,16 +49,6 @@ public class ProductService {
 		entity =  repository.save(entity);
 		return new ProductDTO(entity);
 	}
-
-	public void delete(Long id) {
-		try {
-			repository.deleteById(id);
-		} catch (EmptyResultDataAccessException e) {
-			throw new ResourceNotFoundExcception(id);
-		} catch (DataIntegrityViolationException e) {
-			throw new DatabaseExcception(e.getMessage());
-		}
-	}
 	
 	@Transactional
 	public ProductDTO update(Long id, ProductCategoresDTO dto) {
@@ -69,6 +59,16 @@ public class ProductService {
 			return new ProductDTO(entity);
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundExcception(id);
+		}
+	}
+	
+	public void delete(Long id) {
+		try {
+			repository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundExcception(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseExcception(e.getMessage());
 		}
 	}
 
