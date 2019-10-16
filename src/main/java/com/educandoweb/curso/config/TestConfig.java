@@ -13,12 +13,14 @@ import com.educandoweb.curso.entities.Order;
 import com.educandoweb.curso.entities.OrderItem;
 import com.educandoweb.curso.entities.Payment;
 import com.educandoweb.curso.entities.Product;
+import com.educandoweb.curso.entities.Role;
 import com.educandoweb.curso.entities.User;
 import com.educandoweb.curso.entities.enums.OrderStatus;
 import com.educandoweb.curso.repositories.CategoryRepository;
 import com.educandoweb.curso.repositories.OrderItemRepository;
 import com.educandoweb.curso.repositories.OrderRepository;
 import com.educandoweb.curso.repositories.ProductRepository;
+import com.educandoweb.curso.repositories.RoleRepository;
 import com.educandoweb.curso.repositories.UserRepository;
 
 @Configuration
@@ -40,11 +42,27 @@ public class TestConfig implements CommandLineRunner {
 	@Autowired
 	private OrderItemRepository orderItemtRepository;
 	
+	@Autowired
+	private RoleRepository roleRepository;
+	
 	@Override
 	public void run(String... args) throws Exception {
 		
 		User u1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
 		User u2 = new User(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
+		
+		userRepository.saveAll(Arrays.asList(u1, u2));
+		
+		Role r1 = new Role(null, "ROLE_CLIENT");
+		Role r2 = new Role(null, "ROLE_ADMIN");
+		
+		roleRepository.saveAll(Arrays.asList(r1, r2));
+		
+		u1.getRoles().add(r1);
+		u2.getRoles().add(r1);
+		u2.getRoles().add(r2);
+		
+		userRepository.saveAll(Arrays.asList(u1, u2));
 		
 		Order o1 = new Order(null, Instant.parse("2019-06-20T19:53:07Z"), u1, OrderStatus.PAID);
 		Order o2 = new Order(null, Instant.parse("2019-07-21T03:42:10Z"), u2, OrderStatus.WAITING_PAYMENT);
@@ -60,7 +78,6 @@ public class TestConfig implements CommandLineRunner {
 		Product p4 = new Product(null, "PC Gamer", "Donec aliquet odio ac rhoncus cursus.", 1200.0, "");
 		Product p5 = new Product(null, "Rails for Dummies", "Cras fringilla convallis sem vel faucibus.", 100.99, "");
 		
-		userRepository.saveAll(Arrays.asList(u1, u2));
 		
 		orderRepository.saveAll(Arrays.asList(o1,o2,o3));
 		
