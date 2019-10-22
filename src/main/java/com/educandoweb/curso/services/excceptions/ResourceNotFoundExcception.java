@@ -7,4 +7,8 @@ public class ResourceNotFoundExcception extends RuntimeException {
 	public ResourceNotFoundExcception (Object id) {
 		super("Resoucce not found. Id " + id);
 	}
+	
+	public ResourceNotFoundExcception(String msg) {
+		super(msg);
+	}
 }
