@@ -59,4 +59,10 @@ public class CategoryResource {
 		dto = categoryService.update(id, dto);
 		return ResponseEntity.ok().body(dto);
 	}
+	
+	@GetMapping(value ="/product/{productId}")
+	public ResponseEntity<List<CategoryDTO>> findByProduct(@PathVariable Long productId){
+		List<CategoryDTO> list = categoryService.findByProduct(productId); 
+		return ResponseEntity.ok().body(list);
+	}
 }
