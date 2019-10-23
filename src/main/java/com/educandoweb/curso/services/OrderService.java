@@ -4,8 +4,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.educandoweb.curso.dto.OrderDTO;
 import com.educandoweb.curso.dto.OrderItemDTO;
-import com.educandoweb.curso.dto.UserDTO;
 import com.educandoweb.curso.entities.Order;
 import com.educandoweb.curso.entities.OrderItem;
 import com.educandoweb.curso.entities.Product;
@@ -91,5 +91,21 @@ public class OrderService {
 		orderItemRepository.saveAll(order.getItems());
 		
 		return new OrderDTO(order);
+	}
+	
+	@Transactional
+	public OrderDTO update(Long id, OrderDTO dto) {
+		try {
+			Order entity = repository.getOne(id);
+			updateData(entity, dto);
+			entity = repository.save(entity);
+			return new OrderDTO(entity);
+		} catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundExcception(id);
+		}
+	}
+	
+	private void updateData(Order entity, OrderDTO dto) {
+		entity.setOrderStatus(dto.getOrderStatus());
 	}
 }
